@@ -306,10 +306,6 @@ This repository provides tools for analyzing loan approval trends, risk assessme
 
 ---
 
-Here’s a GitHub README section based on your objective, structured and formatted for a project:
-
----
-
 # Loan Approval Optimization Project
 
 ## Objective
