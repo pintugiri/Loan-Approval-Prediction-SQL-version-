@@ -45,19 +45,19 @@ LoanApproved: Loan approval status
 RiskScore: Risk assessment score
 
 1.Distribution of Loan Amounts
-`SELECT 
-    CASE 
-        WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
-        WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
-        WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
-        WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
-        WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
-        WHEN LoanAmount >= 50000 THEN '50000+'
-    END AS LoanAmountRange,
-    COUNT(*) AS LoanCount
-FROM LoanDB.LoanData
-GROUP BY LoanAmountRange
-ORDER BY LoanAmountRange;`
+            `SELECT 
+                CASE 
+                    WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
+                    WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
+                    WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
+                    WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
+                    WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
+                    WHEN LoanAmount >= 50000 THEN '50000+'
+                END AS LoanAmountRange,
+                COUNT(*) AS LoanCount
+            FROM LoanDB.LoanData
+            GROUP BY LoanAmountRange
+            ORDER BY LoanAmountRange;`
 
 2.Loan Approval Rate by Employment Status
 `SELECT 
@@ -139,9 +139,8 @@ Data Gathering & Cleaning:
           Impact: "Improved data quality, leading to more reliable analysis and a 15% increase in model accuracy."
 
 **Quantifiable Impact from Analysis:
-    Example 1: Loan Approval Rate Optimization
-
-          Goal: Identify key factors influencing loan approval to improve decision-making.
+Example 1: Loan Approval Rate Optimization
+Goal: Identify key factors influencing loan approval to improve decision-making.
           Steps:`SELECT EmploymentStatus, AVG(CreditScore) AS AvgCreditScore, AVG(AnnualIncome) AS AvgIncome, COUNT(*) AS LoanCount, 
                  SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) AS ApprovedLoans
           FROM LoanData
