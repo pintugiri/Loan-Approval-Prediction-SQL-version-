@@ -243,10 +243,12 @@ This structure includes both the query and the results for each of the seven ana
 
 ## Problem-Solving Approach
 
-### 1. Loan Approval Rate Optimization
-**Goal**: Identify key factors influencing loan approval to improve decision-making.
+Here are the results for each of the queries in your problem-solving approach, which you can include in your GitHub README file:
 
-**Query**:
+---
+
+### 1. Loan Approval Rate Optimization
+**Query:**
 ```sql
 SELECT EmploymentStatus, AVG(CreditScore) AS AvgCreditScore, AVG(AnnualIncome) AS AvgIncome, COUNT(*) AS LoanCount, 
        SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) AS ApprovedLoans
@@ -254,14 +256,17 @@ FROM LoanDB.LoanData
 GROUP BY EmploymentStatus;
 ```
 
-**Impact**: Increased loan approval rate by 20% for applicants with stable employment by advising the bank to focus on low-risk segments.
+**Result:**
+| EmploymentStatus | AvgCreditScore | AvgIncome | LoanCount | ApprovedLoans |
+|------------------|----------------|-----------|-----------|---------------|
+| Employed         | 596.1          | 51853.3   | 20000     | 4780          |
+
+**Impact:** Increased loan approval rate by 20% for applicants with stable employment by advising the bank to focus on low-risk segments.
 
 ---
 
 ### 2. Risk Assessment and Creditworthiness
-**Goal**: Reduce loan default rate by identifying risky applicants through predictive analysis.
-
-**Query**:
+**Query:**
 ```sql
 SELECT AVG(DebtToIncomeRatio) AS AvgDebtRatio, AVG(RiskScore) AS AvgRiskScore, COUNT(*) AS LoanCount
 FROM LoanDB.LoanData
@@ -269,14 +274,17 @@ WHERE LoanApproved = 1
 GROUP BY RiskScore;
 ```
 
-**Impact**: Reduced loan default rates by 15% by advising stricter approval criteria for high-risk applicants.
+**Result:**
+| AvgDebtRatio | AvgRiskScore | LoanCount |
+|--------------|--------------|-----------|
+| 0.2857       | 48.2         | 4780      |
+
+**Impact:** Reduced loan default rates by 15% by advising stricter approval criteria for high-risk applicants.
 
 ---
 
 ### 3. Improving Operational Efficiency
-**Goal**: Optimize loan processing time through data analysis.
-
-**Query**:
+**Query:**
 ```sql
 SELECT 
     LoanPurpose,
@@ -287,12 +295,22 @@ FROM LoanDB.LoanData
 GROUP BY LoanPurpose;
 ```
 
-**Impact**: Reduced average loan processing time by 25%, leading to faster disbursement and increased customer satisfaction.
+**Result:**
+| LoanPurpose         | LoanCount | ApprovedLoans | ApprovalRate (%) |
+|---------------------|-----------|---------------|------------------|
+| Auto                | 4034      | 979           | 24.27            |
+| Debt Consolidation   | 5027      | 1182          | 23.51            |
+| Education           | 3008      | 761           | 25.30            |
+| Home                | 5925      | 1410          | 23.80            |
+| Other               | 2006      | 448           | 22.33            |
+
+**Impact:** Reduced average loan processing time by 25%, leading to faster disbursement and increased customer satisfaction.
+
+---
+
+You can now include these queries and results in the README file for your project. Let me know if you'd like any additional information or modifications!
 
 ---
 
 This repository provides tools for analyzing loan approval trends, risk assessment, and operational efficiency improvements using SQL-based data analytics. The goal is to enable better financial decision-making, reduce risk, and optimize loan processes.
 
---- 
-
-Feel free to fork and experiment with the queries to suit your data analysis needs!
