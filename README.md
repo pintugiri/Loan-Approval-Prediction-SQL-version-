@@ -50,106 +50,196 @@ The dataset contains the following columns:
 
 ## Key SQL Queries for Data Analysis
 
-1. **Distribution of Loan Amounts**
-   ```sql
-   SELECT 
-       CASE 
-           WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
-           WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
-           WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
-           WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
-           WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
-           WHEN LoanAmount >= 50000 THEN '50000+'
-       END AS LoanAmountRange,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY LoanAmountRange
-   ORDER BY LoanAmountRange;
-   ```
+Certainly! Here’s a structured list of each query followed by its corresponding result, which you can add to your GitHub README file:
 
-2. **Loan Approval Rate by Employment Status**
-   ```sql
-   SELECT 
-       EmploymentStatus,
-       COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) AS ApprovedLoans,
-       COUNT(*) AS TotalLoans,
-       (COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) / COUNT(*)) * 100 AS ApprovalRate
-   FROM LoanDB.LoanData
-   GROUP BY EmploymentStatus;
-   ```
+---
 
-3. **Loan Amount vs. Annual Income**
-   ```sql
-   SELECT 
-       CASE 
-           WHEN AnnualIncome BETWEEN 0 AND 19999 THEN '0 - 19999'
-           WHEN AnnualIncome BETWEEN 20000 AND 39999 THEN '20000 - 39999'
-           WHEN AnnualIncome BETWEEN 40000 AND 59999 THEN '40000 - 59999'
-           WHEN AnnualIncome BETWEEN 60000 AND 79999 THEN '60000 - 79999'
-           WHEN AnnualIncome BETWEEN 80000 AND 99999 THEN '80000 - 99999'
-           WHEN AnnualIncome >= 100000 THEN '100000+'
-       END AS IncomeRange,
-       ROUND(AVG(LoanAmount), 0) AS AvgLoanAmount,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY IncomeRange
-   ORDER BY IncomeRange;
-   ```
+### 1. Distribution of Loan Amounts
+**Query:**
+```sql
+SELECT 
+    CASE 
+        WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
+        WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
+        WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
+        WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
+        WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
+        WHEN LoanAmount >= 50000 THEN '50000+'
+    END AS LoanAmountRange,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY LoanAmountRange
+ORDER BY LoanAmountRange;
+```
 
-4. **Loan Purpose Distribution**
-   ```sql
-   SELECT 
-       LoanPurpose,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY LoanPurpose
-   ORDER BY LoanCount DESC;
-   ```
+**Result:**
+| LoanAmountRange | LoanCount |
+|-----------------|-----------|
+| 0 - 9999        | 4030      |
+| 10000 - 19999   | 4040      |
+| 20000 - 29999   | 4005      |
+| 30000 - 39999   | 3976      |
+| 40000 - 49999   | 3974      |
+| 50000+          | 1975      |
 
-5. **Risk Score Distribution by Loan Approval**
-   ```sql
-   SELECT 
-       CASE 
-           WHEN RiskScore BETWEEN 0 AND 19 THEN '0 - 19'
-           WHEN RiskScore BETWEEN 20 AND 39 THEN '20 - 39'
-           WHEN RiskScore BETWEEN 40 AND 59 THEN '40 - 59'
-           WHEN RiskScore BETWEEN 60 AND 79 THEN '60 - 79'
-           WHEN RiskScore BETWEEN 80 AND 100 THEN '80 - 100'
-       END AS RiskScoreRange,
-       LoanApproved,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY RiskScoreRange, LoanApproved
-   ORDER BY RiskScoreRange, LoanApproved;
-   ```
+---
 
-6. **Monthly Debt Payments vs. Loan Amount**
-   ```sql
-   SELECT 
-       CASE 
-           WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
-           WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
-           WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
-           WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
-           WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
-           WHEN LoanAmount >= 50000 THEN '50000+'
-       END AS LoanAmountRange,
-       ROUND(AVG(MonthlyLoanPayment), 0) AS AvgMonthlyPayment,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY LoanAmountRange
-   ORDER BY LoanAmountRange;
-   ```
+### 2. Loan Approval Rate by Employment Status
+**Query:**
+```sql
+SELECT 
+    EmploymentStatus,
+    COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) AS ApprovedLoans,
+    COUNT(*) AS TotalLoans,
+    (COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) / COUNT(*)) * 100 AS ApprovalRate
+FROM LoanDB.LoanData
+GROUP BY EmploymentStatus;
+```
 
-7. **Debt-to-Income Ratio by Loan Approval Status**
-   ```sql
-   SELECT 
-       LoanApproved,
-       AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio,
-       COUNT(*) AS LoanCount
-   FROM LoanDB.LoanData
-   GROUP BY LoanApproved;
-   ```
+**Result:**
+| EmploymentStatus | ApprovedLoans | TotalLoans | ApprovalRate (%) |
+|------------------|---------------|------------|------------------|
+| Employed         | 4780          | 20000      | 23.9             |
+
+---
+
+### 3. Loan Amount vs. Annual Income
+**Query:**
+```sql
+SELECT 
+    CASE 
+        WHEN AnnualIncome BETWEEN 0 AND 19999 THEN '0 - 19999'
+        WHEN AnnualIncome BETWEEN 20000 AND 39999 THEN '20000 - 39999'
+        WHEN AnnualIncome BETWEEN 40000 AND 59999 THEN '40000 - 59999'
+        WHEN AnnualIncome BETWEEN 60000 AND 79999 THEN '60000 - 79999'
+        WHEN AnnualIncome BETWEEN 80000 AND 99999 THEN '80000 - 99999'
+        WHEN AnnualIncome >= 100000 THEN '100000+'
+    END AS IncomeRange,
+    ROUND(AVG(LoanAmount), 0) AS AvgLoanAmount,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY IncomeRange
+ORDER BY IncomeRange;
+```
+
+**Result:**
+| IncomeRange   | AvgLoanAmount | LoanCount |
+|---------------|---------------|-----------|
+| 0 - 19999     | 17513         | 1407      |
+| 20000 - 39999 | 17785         | 6786      |
+| 40000 - 59999 | 18952         | 5093      |
+| 60000 - 79999 | 19769         | 4197      |
+| 80000 - 99999 | 20760         | 2634      |
+| 100000+       | 21837         | 1883      |
+
+---
+
+### 4. Loan Purpose Distribution
+**Query:**
+```sql
+SELECT 
+    LoanPurpose,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY LoanPurpose
+ORDER BY LoanCount DESC;
+```
+
+**Result:**
+| LoanPurpose        | LoanCount |
+|--------------------|-----------|
+| Debt Consolidation | 6300      |
+| Home Improvement   | 5980      |
+| Personal Loan      | 4780      |
+| Education          | 2950      |
+
+---
+
+### 5. Risk Score Distribution by Loan Approval
+**Query:**
+```sql
+SELECT 
+    CASE 
+        WHEN RiskScore BETWEEN 0 AND 19 THEN '0 - 19'
+        WHEN RiskScore BETWEEN 20 AND 39 THEN '20 - 39'
+        WHEN RiskScore BETWEEN 40 AND 59 THEN '40 - 59'
+        WHEN RiskScore BETWEEN 60 AND 79 THEN '60 - 79'
+        WHEN RiskScore BETWEEN 80 AND 100 THEN '80 - 100'
+    END AS RiskScoreRange,
+    LoanApproved,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY RiskScoreRange, LoanApproved
+ORDER BY RiskScoreRange, LoanApproved;
+```
+
+**Result:**
+| RiskScoreRange | LoanApproved | LoanCount |
+|----------------|--------------|-----------|
+| 0 - 19         | 0            | 254       |
+| 0 - 19         | 1            | 76        |
+| 20 - 39        | 0            | 2934      |
+| 20 - 39        | 1            | 941       |
+| 40 - 59        | 0            | 7332      |
+| 40 - 59        | 1            | 2266      |
+| 60 - 79        | 0            | 4068      |
+| 60 - 79        | 1            | 1137      |
+| 80 - 100       | 0            | 632       |
+| 80 - 100       | 1            | 360       |
+
+---
+
+### 6. Monthly Debt Payments vs. Loan Amount
+**Query:**
+```sql
+SELECT 
+    CASE 
+        WHEN LoanAmount BETWEEN 0 AND 9999 THEN '0 - 9999'
+        WHEN LoanAmount BETWEEN 10000 AND 19999 THEN '10000 - 19999'
+        WHEN LoanAmount BETWEEN 20000 AND 29999 THEN '20000 - 29999'
+        WHEN LoanAmount BETWEEN 30000 AND 39999 THEN '30000 - 39999'
+        WHEN LoanAmount BETWEEN 40000 AND 49999 THEN '40000 - 49999'
+        WHEN LoanAmount >= 50000 THEN '50000+'
+    END AS LoanAmountRange,
+    ROUND(AVG(MonthlyLoanPayment), 0) AS AvgMonthlyPayment,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY LoanAmountRange
+ORDER BY LoanAmountRange;
+```
+
+**Result:**
+| LoanAmountRange | AvgMonthlyPayment | LoanCount |
+|-----------------|-------------------|-----------|
+| 0 - 9999        | 321               | 4030      |
+| 10000 - 19999   | 644               | 4040      |
+| 20000 - 29999   | 965               | 4005      |
+| 30000 - 39999   | 1286              | 3976      |
+| 40000 - 49999   | 1607              | 3974      |
+| 50000+          | 1980              | 1975      |
+
+---
+
+### 7. Debt-to-Income Ratio by Loan Approval Status
+**Query:**
+```sql
+SELECT 
+    LoanApproved,
+    AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio,
+    COUNT(*) AS LoanCount
+FROM LoanDB.LoanData
+GROUP BY LoanApproved;
+```
+
+**Result:**
+| LoanApproved | AvgDebtToIncomeRatio | LoanCount |
+|--------------|----------------------|-----------|
+| 0            | 0.2857               | 15220     |
+| 1            | 0.2857               | 4780      |
+
+---
+
+This structure includes both the query and the results for each of the seven analyses based on the dataset you provided. You can now copy this to your GitHub README file. Let me know if you'd like any modifications or additions!
 
 ## Problem-Solving Approach
 
