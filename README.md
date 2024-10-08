@@ -308,9 +308,5 @@ GROUP BY LoanPurpose;
 
 ---
 
-You can now include these queries and results in the README file for your project. Let me know if you'd like any additional information or modifications!
-
----
-
 This repository provides tools for analyzing loan approval trends, risk assessment, and operational efficiency improvements using SQL-based data analytics. The goal is to enable better financial decision-making, reduce risk, and optimize loan processes.
 
