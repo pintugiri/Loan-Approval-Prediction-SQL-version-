@@ -73,12 +73,12 @@ ORDER BY LoanAmountRange;
 **Result:**
 | LoanAmountRange | LoanCount |
 |-----------------|-----------|
-| 0 - 9999        | 4         |
-| 10000 - 19999   | 35        |
-| 20000 - 29999   | 33        |
-| 30000 - 39999   | 19        |
-| 40000 - 49999   | 5         |
-| 50000+          | 4         |
+| 0 - 9999        | 1174      |
+| 10000 - 19999   | 7419      |
+| 20000 - 29999   | 6057      |
+| 30000 - 39999   | 2981      |
+| 40000 - 49999   | 1328      |
+| 50000+          | 1041      |
 
 ---
 
@@ -97,9 +97,9 @@ GROUP BY EmploymentStatus;
 **Result:**
 | EmploymentStatus | ApprovedLoans | TotalLoans | ApprovalRate (%) |
 |------------------|---------------|------------|------------------|
-| Employed         | 4780          | 20000      | 23.9             |
-|Unemployed        |2              |6           |33.33             |
-|Self-Employed     |1              |6           |16.67             |
+| Employed         | 4089          | 17036      | 24.00            |
+|Self-Employed     | 438           | 1573       | 27.84            |
+|Unemployed        | 253           | 1391       | 18.19            |
 ---
 
 ### 3. Loan Amount vs. Annual Income
@@ -124,12 +124,12 @@ ORDER BY IncomeRange;
 **Result:**
 | IncomeRange   | AvgLoanAmount | LoanCount |
 |---------------|---------------|-----------|
-| 0 - 19999     | 17513         | 1407      |
-| 20000 - 39999 | 17785         | 6786      |
-| 40000 - 59999 | 18952         | 5093      |
-| 60000 - 79999 | 19769         | 4197      |
-| 80000 - 99999 | 20760         | 2634      |
-| 100000+       | 21837         | 1883      |
+| 0 - 19999     | 25095         | 1532      |
+| 20000 - 39999 | 25045         | 6095      |
+| 40000 - 59999 | 24705         | 5053      |
+| 60000 - 79999 | 24763         | 3021      |
+| 80000 - 99999 | 24961         | 3021      |
+| 100000+       | 24805         | 2510      |
 
 ---
 
@@ -146,12 +146,12 @@ ORDER BY LoanCount DESC;
 
 **Result:**
 | LoanPurpose        | LoanCount |
-|--------------------|-----------|
-| Debt Consolidation | 6300      |
-| Home Improvement   | 5980      |
-| Personal Loan      | 4780      |
-| Education          | 2950      |
-
+|--------------------|-----------| 
+| Home               | 5095      |
+| Debt Consolidation | 5027      |
+| Auto               | 4034      |
+| Education          | 3008      |
+| Others             | 2006      |
 ---
 
 ### 5. Risk Score Distribution by Loan Approval
@@ -175,16 +175,13 @@ ORDER BY RiskScoreRange, LoanApproved;
 **Result:**
 | RiskScoreRange | LoanApproved | LoanCount |
 |----------------|--------------|-----------|
-| 0 - 19         | 0            | 254       |
-| 0 - 19         | 1            | 76        |
-| 20 - 39        | 0            | 2934      |
-| 20 - 39        | 1            | 941       |
-| 40 - 59        | 0            | 7332      |
-| 40 - 59        | 1            | 2266      |
-| 60 - 79        | 0            | 4068      |
-| 60 - 79        | 1            | 1137      |
-| 80 - 100       | 0            | 632       |
-| 80 - 100       | 1            | 360       |
+| NULL           | 1            | 424       |
+| 20 - 39        | 0            | 3         |
+| 20 - 39        | 1            | 1794      |
+| 40 - 59        | 0            | 13043     |
+| 40 - 59        | 1            | 2562      |
+| 60 - 79        | 0            | 2173      |
+| 80 - 100       | 0            | 1         |
 
 ---
 
@@ -210,12 +207,12 @@ ORDER BY LoanAmountRange;
 **Result:**
 | LoanAmountRange | AvgMonthlyPayment | LoanCount |
 |-----------------|-------------------|-----------|
-| 0 - 9999        | 321               | 4030      |
-| 10000 - 19999   | 644               | 4040      |
-| 20000 - 29999   | 965               | 4005      |
-| 30000 - 39999   | 1286              | 3976      |
-| 40000 - 49999   | 1607              | 3974      |
-| 50000+          | 1980              | 1975      |
+| 0 - 9999        | 291               | 1174      |
+| 10000 - 19999   | 546               | 7419      |
+| 20000 - 29999   | 885               | 6057      |
+| 30000 - 39999   | 1268              | 2981      |
+| 40000 - 49999   | 1649              | 1328      |
+| 50000+          | 2413              | 1041      |
 
 ---
 
@@ -254,7 +251,9 @@ GROUP BY EmploymentStatus;
 **Result:**
 | EmploymentStatus | AvgCreditScore | AvgIncome | LoanCount | ApprovedLoans |
 |------------------|----------------|-----------|-----------|---------------|
-| Employed         | 596.1          | 51853.3   | 20000     | 4780          |
+| Employed         | 571            | 58893     | 17093     | 4089          |
+| Self_Employed    | 575            | 61124     | 1573      | 438           |
+| Unemployed       | 573            | 60233     | 1391      | 253           |
 
 **Impact:** Increased loan approval rate by 20% for applicants with stable employment by advising the bank to focus on low-risk segments.
 
@@ -263,16 +262,33 @@ GROUP BY EmploymentStatus;
 ### 2. Risk Assessment and Creditworthiness
 **Query:**
 ```sql
-SELECT AVG(DebtToIncomeRatio) AS AvgDebtRatio, AVG(RiskScore) AS AvgRiskScore, COUNT(*) AS LoanCount
+SELECT 
+    CASE 
+        WHEN DebtToIncomeRatio < 0.1 THEN 'Below 0.1'
+        WHEN DebtToIncomeRatio BETWEEN 0.1 AND 0.2 THEN '0.1 - 0.2'
+        WHEN DebtToIncomeRatio BETWEEN 0.2 AND 0.4 THEN '0.2 - 0.4'
+        WHEN DebtToIncomeRatio BETWEEN 0.4 AND 0.6 THEN '0.4 - 0.6'
+        WHEN DebtToIncomeRatio BETWEEN 0.6 AND 0.8 THEN '0.6 - 0.8'
+        ELSE 'Above 0.8'
+    END AS DebtToIncomeRange,
+    AVG(DebtToIncomeRatio) AS AvgDebtRatio,
+    AVG(RiskScore) AS AvgRiskScore,
+    COUNT(*) AS LoanCount
 FROM LoanDB.LoanData
 WHERE LoanApproved = 1
-GROUP BY RiskScore;
+GROUP BY DebtToIncomeRange
+ORDER BY 4 DESC;
 ```
 
 **Result:**
-| AvgDebtRatio | AvgRiskScore | LoanCount |
-|--------------|--------------|-----------|
-| 0.2857       | 48.2         | 4780      |
+| DebtToIncomeRange | AvgDebtRatio | AvgRiskScore | LoanCount |
+|-------------------|--------------|--------------|-----------|
+| Below 0.1         | 0.29         | 40.15        | 2025      |
+| Above 0.8         | 0.15         | 37.82        | 1092      |
+| 0.6 - 0.8         | 0.48         | 43.35        | 914       |
+| 0.4 - 0.6         | 0.06         | 37.84        | 554       |
+| 0.2 - 0.4         | 0.67         | 44.25        | 189       |
+| 0.1 - 0.2         | 0.83         | 46.63        | 6         |
 
 **Impact:** Reduced loan default rates by 15% by advising stricter approval criteria for high-risk applicants.
 
@@ -293,11 +309,11 @@ GROUP BY LoanPurpose;
 **Result:**
 | LoanPurpose         | LoanCount | ApprovedLoans | ApprovalRate (%) |
 |---------------------|-----------|---------------|------------------|
-| Auto                | 4034      | 979           | 24.27            |
-| Debt Consolidation   | 5027      | 1182          | 23.51            |
-| Education           | 3008      | 761           | 25.30            |
 | Home                | 5925      | 1410          | 23.80            |
-| Other               | 2006      | 448           | 22.33            |
+| Debt Consolidation  | 5027      | 1182          | 23.51            | 
+| Education           | 3008      | 761           | 25.30            | 
+| Other               | 2006      | 448           | 23.33            |
+| Auto                | 4034      | 979           | 24.27            |
 
 **Impact:** Reduced average loan processing time by 25%, leading to faster disbursement and increased customer satisfaction.
 
