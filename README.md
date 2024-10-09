@@ -73,12 +73,12 @@ ORDER BY LoanAmountRange;
 **Result:**
 | LoanAmountRange | LoanCount |
 |-----------------|-----------|
-| 0 - 9999        | 4030      |
-| 10000 - 19999   | 4040      |
-| 20000 - 29999   | 4005      |
-| 30000 - 39999   | 3976      |
-| 40000 - 49999   | 3974      |
-| 50000+          | 1975      |
+| 0 - 9999        | 4         |
+| 10000 - 19999   | 35        |
+| 20000 - 29999   | 33        |
+| 30000 - 39999   | 19        |
+| 40000 - 49999   | 5         |
+| 50000+          | 4         |
 
 ---
 
@@ -98,7 +98,8 @@ GROUP BY EmploymentStatus;
 | EmploymentStatus | ApprovedLoans | TotalLoans | ApprovalRate (%) |
 |------------------|---------------|------------|------------------|
 | Employed         | 4780          | 20000      | 23.9             |
-
+|Unemployed        |2              |6           |33.33             |
+|Self-Employed     |1              |6           |16.67             |
 ---
 
 ### 3. Loan Amount vs. Annual Income
