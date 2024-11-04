@@ -55,16 +55,7 @@ The dataset contains the following columns:
      ```sql
      SELECT * FROM LoanDB.LoanData WHERE ApplicationDate BETWEEN '2018-01-01' AND '2018-01-31';
      ```
-     **Result:**
-      | IncomeRange   | AvgLoanAmount | LoanCount |
-      |---------------|---------------|-----------|
-      | 0 - 19999     | 25095         | 1532      |
-      | 20000 - 39999 | 25045         | 6095      |
-      | 40000 - 59999 | 24705         | 5053      |
-      | 60000 - 79999 | 24763         | 3021      |
-      | 80000 - 99999 | 24961         | 3021      |
-      | 100000+       | 24805         | 2510      |
-
+     
 ---
 
 2. **Aggregate Functions**
