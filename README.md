@@ -50,6 +50,122 @@ The dataset contains the following columns:
 
 ## Key SQL Queries for Data Analysis
 
+### General SQL Interview Questions
+
+1. **Retrieve Basic Details**
+   - *Question*: Retrieve all records of applicants who applied for a loan in January 2018.
+     ```sql
+     SELECT * FROM Loan WHERE ApplicationDate BETWEEN '2018-01-01' AND '2018-01-31';
+     ```
+
+2. **Aggregate Functions**
+   - *Question*: What is the average loan amount for each employment status?
+     ```sql
+     SELECT EmploymentStatus, AVG(LoanAmount) AS AverageLoanAmount
+     FROM Loan
+     GROUP BY EmploymentStatus;
+     ```
+
+3. **Filtering and Sorting**
+   - *Question*: Find the top 5 highest loan amounts along with the applicant’s credit score.
+     ```sql
+     SELECT LoanAmount, CreditScore
+     FROM Loan
+     ORDER BY LoanAmount DESC
+     LIMIT 5;
+     ```
+
+4. **JOINs (if there's another table available)**
+   - *Hypothetical Question*: Join the Loan table with a `Customer` table (if it exists) to retrieve customer names with their loan amounts.
+   
+5. **Grouping and Conditional Aggregation**
+   - *Question*: How many applicants were approved and denied in each education level category?
+  
+     ```sql
+     SELECT EducationLevel, 
+            COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) AS Approved,
+            COUNT(CASE WHEN LoanApproved = 0 THEN 1 END) AS Denied
+     FROM Loan
+     GROUP BY EducationLevel;
+     ```
+
+6. **Calculate Ratios**
+   - *Question*: Calculate the debt-to-income ratio for each applicant, and identify those with a ratio over 0.4. 
+     ```sql
+     SELECT ApplicantID, DebtToIncomeRatio
+     FROM Loan
+     WHERE DebtToIncomeRatio > 0.4;
+     ```
+
+### Loan Approval Prediction-Focused Questions
+
+For loan approval prediction, questions tend to focus on features like credit score, loan amount, and debt-to-income ratio, which are key indicators in predicting loan approval.
+
+1. **Identify Key Factors Affecting Approval**
+   - *Question*: What are the average credit scores and debt-to-income ratios for approved vs. denied loans?
+     ```sql
+     SELECT LoanApproved, AVG(CreditScore) AS AvgCreditScore, AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio
+     FROM Loan
+     GROUP BY LoanApproved;
+     ```
+
+2. **Threshold-Based Filtering**
+   - *Question*: Find all applicants with a credit score above 700 and a debt-to-income ratio below 0.35 who were approved.
+     ```sql
+     SELECT *
+     FROM Loan
+     WHERE CreditScore > 700 
+       AND DebtToIncomeRatio < 0.35
+       AND LoanApproved = 1;
+     ```
+
+3. **Risk Score Analysis**
+   - *Question*: List all applicants who were approved with a risk score below 40.
+     ```sql
+     SELECT *
+     FROM Loan
+     WHERE LoanApproved = 1 AND RiskScore < 40;
+     ```
+
+4. **Monthly Loan Payment Impact on Approval**
+   - *Question*: Compare the average monthly loan payments of approved vs. denied applicants.
+     ```sql
+     SELECT LoanApproved, AVG(MonthlyLoanPayment) AS AvgMonthlyLoanPayment
+     FROM Loan
+     GROUP BY LoanApproved;
+     ```
+
+5. **Analyze Approval Rate by Credit Score Range**
+   - *Question*: What percentage of applicants are approved for each credit score range (e.g., 600-650, 650-700)?
+     ```sql
+     SELECT CASE 
+              WHEN CreditScore BETWEEN 600 AND 650 THEN '600-650'
+              WHEN CreditScore BETWEEN 651 AND 700 THEN '651-700'
+              WHEN CreditScore BETWEEN 701 AND 750 THEN '701-750'
+              ELSE '751+'
+            END AS CreditScoreRange,
+            COUNT(*) AS TotalApplicants,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     GROUP BY CreditScoreRange;
+     ```
+
+6. **Predictive Feature Selection**
+   - *Question*: Which features (e.g., LoanAmount, CreditScore, DebtToIncomeRatio) are most correlated with loan approval?
+     ```sql
+     SELECT AVG(LoanAmount) AS AvgLoanAmount, 
+            AVG(CreditScore) AS AvgCreditScore, 
+            AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio
+     FROM Loan
+     WHERE LoanApproved = 1
+     UNION ALL
+     SELECT AVG(LoanAmount), 
+            AVG(CreditScore), 
+            AVG(DebtToIncomeRatio)
+     FROM Loan
+     WHERE LoanApproved = 0;
+     ```
+
 ---
 
 ### 1. Distribution of Loan Amounts
@@ -366,6 +482,7 @@ The insights derived from the analysis allowed the institution to adjust its loa
 - **15% reduction** in loan default rates.
 
 This project demonstrates the value of data-driven analysis in improving decision-making processes in financial institutions, enhancing both approval efficiency and risk management strategies.
+
 
 
 
