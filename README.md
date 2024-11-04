@@ -166,9 +166,111 @@ For loan approval prediction, questions tend to focus on features like credit sc
      WHERE LoanApproved = 0;
      ```
 
+7. **Calculate Approval Rate by Age Group**
+   - *Question*: What is the loan approval rate for each age group (e.g., 20-30, 30-40)?
+     ```sql
+     SELECT CASE 
+              WHEN Age BETWEEN 20 AND 30 THEN '20-30'
+              WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+              WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+              ELSE '51+'
+            END AS AgeGroup,
+            COUNT(*) AS TotalApplicants,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     GROUP BY AgeGroup;
+     ```
+
+8. **Analyze Approval by Employment Status**
+   - *Question*: How does employment status impact loan approval rates?
+     ```sql
+     SELECT EmploymentStatus,
+            COUNT(*) AS TotalApplicants,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     GROUP BY EmploymentStatus;
+     ```
+
+9. **Debt-to-Income and Credit Score Combined Analysis**
+   - *Question*: How do debt-to-income ratios and credit scores together impact loan approval?
+     ```sql
+     SELECT CASE 
+              WHEN DebtToIncomeRatio < 0.3 THEN 'Low DTI'
+              WHEN DebtToIncomeRatio BETWEEN 0.3 AND 0.5 THEN 'Medium DTI'
+              ELSE 'High DTI'
+            END AS DTI_Category,
+            CASE 
+              WHEN CreditScore >= 750 THEN 'Excellent'
+              WHEN CreditScore BETWEEN 650 AND 749 THEN 'Good'
+              WHEN CreditScore BETWEEN 600 AND 649 THEN 'Fair'
+              ELSE 'Poor'
+            END AS CreditScoreCategory,
+            COUNT(*) AS TotalApplicants,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     GROUP BY DTI_Category, CreditScoreCategory;
+     ```
+
+10. **Identify Potential Loan Risks**
+   - *Question*: List applicants with high debt-to-income ratios and low credit scores who were approved, indicating potential risk.
+     ```sql
+     SELECT *
+     FROM Loan
+     WHERE DebtToIncomeRatio > 0.5 
+       AND CreditScore < 600
+       AND LoanApproved = 1;
+     ```
+
+11. **Loan Duration and Interest Rate Analysis**
+   - *Question*: What are the average interest rates for different loan durations?
+     ```sql
+     SELECT LoanDuration, AVG(InterestRate) AS AvgInterestRate
+     FROM Loan
+     GROUP BY LoanDuration
+     ORDER BY LoanDuration;
+     ```
+
+12. **Analyze Loan Approval by Loan Purpose**
+   - *Question*: What is the approval rate by loan purpose?
+     ```sql
+     SELECT LoanPurpose,
+            COUNT(*) AS TotalApplications,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     GROUP BY LoanPurpose;
+     ```
+
+13. **Subquery for Comparative Analysis**
+   - *Question*: Find the average credit score for approved applicants who have a debt-to-income ratio higher than the average across all applicants.
+     ```sql
+     SELECT AVG(CreditScore) AS AvgCreditScore
+     FROM Loan
+     WHERE LoanApproved = 1 AND DebtToIncomeRatio > (SELECT AVG(DebtToIncomeRatio) FROM Loan);
+     ```
+
+14. **Calculate Monthly Payment as a Percentage of Income**
+   - *Question*: Find the percentage of income each applicant’s monthly loan payment represents, and retrieve applicants with a high percentage (>30%).
+     ```sql
+     SELECT ApplicantID, 
+            MonthlyLoanPayment / MonthlyIncome * 100 AS PaymentToIncomePercentage
+     FROM Loan
+     WHERE MonthlyLoanPayment / MonthlyIncome > 0.3;
+     ```
+
+15. **Loan Approval by Education Level and Job Tenure**
+   - *Question*: What is the approval rate by education level for applicants with more than 5 years of job tenure?
+     ```sql
+     SELECT EducationLevel,
+            COUNT(*) AS TotalApplicants,
+            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
+     FROM Loan
+     WHERE JobTenure > 5
+     GROUP BY EducationLevel;
+     ```
+
 ---
 
-### 1. Distribution of Loan Amounts
+### 16. Distribution of Loan Amounts
 **Query:**
 ```sql
 SELECT 
@@ -198,7 +300,7 @@ ORDER BY LoanAmountRange;
 
 ---
 
-### 2. Loan Approval Rate by Employment Status
+### 17. Loan Approval Rate by Employment Status
 **Query:**
 ```sql
 SELECT 
@@ -218,7 +320,7 @@ GROUP BY EmploymentStatus;
 |Unemployed        | 253           | 1391       | 18.19            |
 ---
 
-### 3. Loan Amount vs. Annual Income
+### 18. Loan Amount vs. Annual Income
 **Query:**
 ```sql
 SELECT 
@@ -249,7 +351,7 @@ ORDER BY IncomeRange;
 
 ---
 
-### 4. Loan Purpose Distribution
+### 19. Loan Purpose Distribution
 **Query:**
 ```sql
 SELECT 
@@ -270,7 +372,7 @@ ORDER BY LoanCount DESC;
 | Others             | 2006      |
 ---
 
-### 5. Risk Score Distribution by Loan Approval
+### 20. Risk Score Distribution by Loan Approval
 **Query:**
 ```sql
 SELECT 
@@ -301,7 +403,7 @@ ORDER BY RiskScoreRange, LoanApproved;
 
 ---
 
-### 6. Monthly Debt Payments vs. Loan Amount
+### 21. Monthly Debt Payments vs. Loan Amount
 **Query:**
 ```sql
 SELECT 
@@ -332,7 +434,7 @@ ORDER BY LoanAmountRange;
 
 ---
 
-### 7. Debt-to-Income Ratio by Loan Approval Status
+### 22. Debt-to-Income Ratio by Loan Approval Status
 **Query:**
 ```sql
 SELECT 
@@ -355,7 +457,7 @@ GROUP BY LoanApproved;
 
 ---
 
-### 1. Loan Approval Rate Optimization
+### 23. Loan Approval Rate Optimization
 **Query:**
 ```sql
 SELECT EmploymentStatus, AVG(CreditScore) AS AvgCreditScore, AVG(AnnualIncome) AS AvgIncome, COUNT(*) AS LoanCount, 
@@ -375,7 +477,7 @@ GROUP BY EmploymentStatus;
 
 ---
 
-### 2. Risk Assessment and Creditworthiness
+### 24. Risk Assessment and Creditworthiness
 **Query:**
 ```sql
 SELECT 
@@ -410,7 +512,7 @@ ORDER BY 4 DESC;
 
 ---
 
-### 3. Improving Operational Efficiency
+### 25. Improving Operational Efficiency
 **Query:**
 ```sql
 SELECT 
