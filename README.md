@@ -75,9 +75,6 @@ The dataset contains the following columns:
      LIMIT 5;
      ```
 
-4. **JOINs (if there's another table available)**
-   - *Hypothetical Question*: Join the Loan table with a `Customer` table (if it exists) to retrieve customer names with their loan amounts.
-   
 5. **Grouping and Conditional Aggregation**
    - *Question*: How many applicants were approved and denied in each education level category?
   
