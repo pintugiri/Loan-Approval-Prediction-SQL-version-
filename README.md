@@ -50,8 +50,6 @@ The dataset contains the following columns:
 
 ## Key SQL Queries for Data Analysis
 
-### General SQL Interview Questions
-
 1. **Retrieve Basic Details**
    - *Question*: Retrieve all records of applicants who applied for a loan in January 2018.
      ```sql
