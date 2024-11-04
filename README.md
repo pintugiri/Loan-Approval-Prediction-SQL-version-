@@ -53,14 +53,25 @@ The dataset contains the following columns:
 1. **Retrieve Basic Details**
    - *Question*: Retrieve all records of applicants who applied for a loan in January 2018.
      ```sql
-     SELECT * FROM Loan WHERE ApplicationDate BETWEEN '2018-01-01' AND '2018-01-31';
+     SELECT * FROM LoanDB.LoanData WHERE ApplicationDate BETWEEN '2018-01-01' AND '2018-01-31';
      ```
+     **Result:**
+| IncomeRange   | AvgLoanAmount | LoanCount |
+|---------------|---------------|-----------|
+| 0 - 19999     | 25095         | 1532      |
+| 20000 - 39999 | 25045         | 6095      |
+| 40000 - 59999 | 24705         | 5053      |
+| 60000 - 79999 | 24763         | 3021      |
+| 80000 - 99999 | 24961         | 3021      |
+| 100000+       | 24805         | 2510      |
+
+---
 
 2. **Aggregate Functions**
    - *Question*: What is the average loan amount for each employment status?
      ```sql
      SELECT EmploymentStatus, AVG(LoanAmount) AS AverageLoanAmount
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY EmploymentStatus;
      ```
 
@@ -68,7 +79,7 @@ The dataset contains the following columns:
    - *Question*: Find the top 5 highest loan amounts along with the applicant’s credit score.
      ```sql
      SELECT LoanAmount, CreditScore
-     FROM Loan
+     FROM LoanDB.LoanData
      ORDER BY LoanAmount DESC
      LIMIT 5;
      ```
@@ -83,7 +94,7 @@ The dataset contains the following columns:
      SELECT EducationLevel, 
             COUNT(CASE WHEN LoanApproved = 1 THEN 1 END) AS Approved,
             COUNT(CASE WHEN LoanApproved = 0 THEN 1 END) AS Denied
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY EducationLevel;
      ```
 
@@ -91,7 +102,7 @@ The dataset contains the following columns:
    - *Question*: Calculate the debt-to-income ratio for each applicant, and identify those with a ratio over 0.4. 
      ```sql
      SELECT ApplicantID, DebtToIncomeRatio
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE DebtToIncomeRatio > 0.4;
      ```
 
@@ -103,7 +114,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: What are the average credit scores and debt-to-income ratios for approved vs. denied loans?
      ```sql
      SELECT LoanApproved, AVG(CreditScore) AS AvgCreditScore, AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY LoanApproved;
      ```
 
@@ -111,7 +122,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: Find all applicants with a credit score above 700 and a debt-to-income ratio below 0.35 who were approved.
      ```sql
      SELECT *
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE CreditScore > 700 
        AND DebtToIncomeRatio < 0.35
        AND LoanApproved = 1;
@@ -121,7 +132,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: List all applicants who were approved with a risk score below 40.
      ```sql
      SELECT *
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE LoanApproved = 1 AND RiskScore < 40;
      ```
 
@@ -129,7 +140,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: Compare the average monthly loan payments of approved vs. denied applicants.
      ```sql
      SELECT LoanApproved, AVG(MonthlyLoanPayment) AS AvgMonthlyLoanPayment
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY LoanApproved;
      ```
 
@@ -144,7 +155,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
             END AS CreditScoreRange,
             COUNT(*) AS TotalApplicants,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY CreditScoreRange;
      ```
 
@@ -154,7 +165,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      SELECT AVG(LoanAmount) AS AvgLoanAmount, 
             AVG(CreditScore) AS AvgCreditScore, 
             AVG(DebtToIncomeRatio) AS AvgDebtToIncomeRatio
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE LoanApproved = 1
      UNION ALL
      SELECT AVG(LoanAmount), 
@@ -175,7 +186,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
             END AS AgeGroup,
             COUNT(*) AS TotalApplicants,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY AgeGroup;
      ```
 
@@ -185,7 +196,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      SELECT EmploymentStatus,
             COUNT(*) AS TotalApplicants,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY EmploymentStatus;
      ```
 
@@ -205,7 +216,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
             END AS CreditScoreCategory,
             COUNT(*) AS TotalApplicants,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY DTI_Category, CreditScoreCategory;
      ```
 
@@ -213,7 +224,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: List applicants with high debt-to-income ratios and low credit scores who were approved, indicating potential risk.
      ```sql
      SELECT *
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE DebtToIncomeRatio > 0.5 
        AND CreditScore < 600
        AND LoanApproved = 1;
@@ -223,7 +234,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: What are the average interest rates for different loan durations?
      ```sql
      SELECT LoanDuration, AVG(InterestRate) AS AvgInterestRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY LoanDuration
      ORDER BY LoanDuration;
      ```
@@ -234,7 +245,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      SELECT LoanPurpose,
             COUNT(*) AS TotalApplications,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      GROUP BY LoanPurpose;
      ```
 
@@ -242,7 +253,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
    - *Question*: Find the average credit score for approved applicants who have a debt-to-income ratio higher than the average across all applicants.
      ```sql
      SELECT AVG(CreditScore) AS AvgCreditScore
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE LoanApproved = 1 AND DebtToIncomeRatio > (SELECT AVG(DebtToIncomeRatio) FROM Loan);
      ```
 
@@ -251,7 +262,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      ```sql
      SELECT ApplicantID, 
             MonthlyLoanPayment / MonthlyIncome * 100 AS PaymentToIncomePercentage
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE MonthlyLoanPayment / MonthlyIncome > 0.3;
      ```
 
@@ -261,7 +272,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      SELECT EducationLevel,
             COUNT(*) AS TotalApplicants,
             SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM Loan
+     FROM LoanDB.LoanData
      WHERE JobTenure > 5
      GROUP BY EducationLevel;
      ```
