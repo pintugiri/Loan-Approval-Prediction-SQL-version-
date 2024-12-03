@@ -173,17 +173,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      GROUP BY AgeGroup;
      ```
 
-8. **Analyze Approval by Employment Status**
-   - *Question*: How does employment status impact loan approval rates?
-     ```sql
-     SELECT EmploymentStatus,
-            COUNT(*) AS TotalApplicants,
-            SUM(CASE WHEN LoanApproved = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ApprovalRate
-     FROM LoanDB.LoanData
-     GROUP BY EmploymentStatus;
-     ```
-
-9. **Debt-to-Income and Credit Score Combined Analysis**
+8. **Debt-to-Income and Credit Score Combined Analysis**
    - *Question*: How do debt-to-income ratios and credit scores together impact loan approval?
      ```sql
      SELECT CASE 
@@ -203,7 +193,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      GROUP BY DTI_Category, CreditScoreCategory;
      ```
 
-10. **Identify Potential Loan Risks**
+9. **Identify Potential Loan Risks**
    - *Question*: List applicants with high debt-to-income ratios and low credit scores who were approved, indicating potential risk.
      ```sql
      SELECT *
@@ -213,7 +203,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
        AND LoanApproved = 1;
      ```
 
-11. **Loan Duration and Interest Rate Analysis**
+10. **Loan Duration and Interest Rate Analysis**
    - *Question*: What are the average interest rates for different loan durations?
      ```sql
      SELECT LoanDuration, AVG(InterestRate) AS AvgInterestRate
@@ -222,7 +212,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      ORDER BY LoanDuration;
      ```
 
-12. **Analyze Loan Approval by Loan Purpose**
+11. **Analyze Loan Approval by Loan Purpose**
    - *Question*: What is the approval rate by loan purpose?
      ```sql
      SELECT LoanPurpose,
@@ -232,7 +222,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      GROUP BY LoanPurpose;
      ```
 
-13. **Subquery for Comparative Analysis**
+12. **Subquery for Comparative Analysis**
    - *Question*: Find the average credit score for approved applicants who have a debt-to-income ratio higher than the average across all applicants.
      ```sql
      SELECT AVG(CreditScore) AS AvgCreditScore
@@ -240,7 +230,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      WHERE LoanApproved = 1 AND DebtToIncomeRatio > (SELECT AVG(DebtToIncomeRatio) FROM Loan);
      ```
 
-14. **Calculate Monthly Payment as a Percentage of Income**
+13. **Calculate Monthly Payment as a Percentage of Income**
    - *Question*: Find the percentage of income each applicant’s monthly loan payment represents, and retrieve applicants with a high percentage (>30%).
      ```sql
      SELECT ApplicantID, 
@@ -249,7 +239,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
      WHERE MonthlyLoanPayment / MonthlyIncome > 0.3;
      ```
 
-15. **Loan Approval by Education Level and Job Tenure**
+14. **Loan Approval by Education Level and Job Tenure**
    - *Question*: What is the approval rate by education level for applicants with more than 5 years of job tenure?
      ```sql
      SELECT EducationLevel,
@@ -262,7 +252,7 @@ For loan approval prediction, questions tend to focus on features like credit sc
 
 ---
 
-### 16. Distribution of Loan Amounts
+### 15. Distribution of Loan Amounts
 **Query:**
 ```sql
 SELECT 
@@ -292,7 +282,7 @@ ORDER BY LoanAmountRange;
 
 ---
 
-### 17. Loan Approval Rate by Employment Status
+### 16. Loan Approval Rate by Employment Status
 **Query:**
 ```sql
 SELECT 
@@ -312,7 +302,7 @@ GROUP BY EmploymentStatus;
 |Unemployed        | 253           | 1391       | 18.19            |
 ---
 
-### 18. Loan Amount vs. Annual Income
+### 17. Loan Amount vs. Annual Income
 **Query:**
 ```sql
 SELECT 
@@ -343,7 +333,7 @@ ORDER BY IncomeRange;
 
 ---
 
-### 19. Loan Purpose Distribution
+### 18. Loan Purpose Distribution
 **Query:**
 ```sql
 SELECT 
@@ -364,7 +354,7 @@ ORDER BY LoanCount DESC;
 | Others             | 2006      |
 ---
 
-### 20. Risk Score Distribution by Loan Approval
+### 19. Risk Score Distribution by Loan Approval
 **Query:**
 ```sql
 SELECT 
@@ -395,7 +385,7 @@ ORDER BY RiskScoreRange, LoanApproved;
 
 ---
 
-### 21. Monthly Debt Payments vs. Loan Amount
+### 20. Monthly Debt Payments vs. Loan Amount
 **Query:**
 ```sql
 SELECT 
@@ -426,7 +416,7 @@ ORDER BY LoanAmountRange;
 
 ---
 
-### 22. Debt-to-Income Ratio by Loan Approval Status
+### 21. Debt-to-Income Ratio by Loan Approval Status
 **Query:**
 ```sql
 SELECT 
@@ -449,7 +439,7 @@ GROUP BY LoanApproved;
 
 ---
 
-### 23. Loan Approval Rate Optimization
+### 22. Loan Approval Rate Optimization
 **Query:**
 ```sql
 SELECT EmploymentStatus, AVG(CreditScore) AS AvgCreditScore, AVG(AnnualIncome) AS AvgIncome, COUNT(*) AS LoanCount, 
@@ -469,7 +459,7 @@ GROUP BY EmploymentStatus;
 
 ---
 
-### 24. Risk Assessment and Creditworthiness
+### 23. Risk Assessment and Creditworthiness
 **Query:**
 ```sql
 SELECT 
@@ -504,7 +494,7 @@ ORDER BY 4 DESC;
 
 ---
 
-### 25. Improving Operational Efficiency
+### 24. Improving Operational Efficiency
 **Query:**
 ```sql
 SELECT 
