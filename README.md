@@ -119,9 +119,12 @@ For loan approval prediction, questions tend to focus on features like credit sc
 4. **Monthly Loan Payment Impact on Approval**
    - *Question*: Compare the average monthly loan payments of approved vs. denied applicants.
      ```sql
-     SELECT LoanApproved, AVG(MonthlyLoanPayment) AS AvgMonthlyLoanPayment
-     FROM LoanDB.LoanData
-     GROUP BY LoanApproved;
+     select
+       substring(ApplicationDate,1,7) as month,
+       sum(case when LoanApproved = 1 then 1 end) as approved_loan_cnt,
+       sum(case when LoanApproved = 0 then 1 end) as decline_loan_cnt
+     from LoanDB.LoanData
+     group by 1;
      ```
 
 5. **Analyze Approval Rate by Credit Score Range**
