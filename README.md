@@ -86,14 +86,6 @@ The dataset contains the following columns:
      GROUP BY EducationLevel;
      ```
 
-6. **Calculate Ratios**
-   - *Question*: Calculate the debt-to-income ratio for each applicant, and identify those with a ratio over 0.4. 
-     ```sql
-     SELECT ApplicantID, DebtToIncomeRatio
-     FROM LoanDB.LoanData
-     WHERE DebtToIncomeRatio > 0.4;
-     ```
-
 ### Loan Approval Prediction-Focused Questions
 
 For loan approval prediction, questions tend to focus on features like credit score, loan amount, and debt-to-income ratio, which are key indicators in predicting loan approval.
