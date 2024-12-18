@@ -116,16 +116,6 @@ For loan approval prediction, questions tend to focus on features like credit sc
      WHERE LoanApproved = 1 AND RiskScore < 40;
      ```
 
-4. **Monthly Loan Payment Impact on Approval**
-   - *Question*: Compare the average monthly loan payments of approved vs. denied applicants.
-     ```sql
-     select
-       substring(ApplicationDate,1,7) as month,
-       sum(case when LoanApproved = 1 then 1 end) as approved_loan_cnt,
-       sum(case when LoanApproved = 0 then 1 end) as decline_loan_cnt
-     from LoanDB.LoanData
-     group by 1;
-     ```
 
 5. **Analyze Approval Rate by Credit Score Range**
    - *Question*: What percentage of applicants are approved for each credit score range (e.g., 600-650, 650-700)?
